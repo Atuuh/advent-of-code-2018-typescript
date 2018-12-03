@@ -1,0 +1,14 @@
+{
+    "include": [
+        "**/*.ts"
+    ],
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es2018",
+        "noImplicitAny": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "sourceMap": true,
+        "outDir": "dist/"
+    },
+}
