@@ -1,8 +1,8 @@
 export class Advent {
-    protected PartA: string;
-    protected PartB: string;
-    protected DayNumber: string;
-    protected Input: string;
+    protected PartA: string = "";
+    protected PartB: string = "";
+    protected DayNumber: string = "";
+    protected Input: string = "";
 
     protected constructor() {
 
