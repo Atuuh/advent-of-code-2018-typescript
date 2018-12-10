@@ -16,6 +16,27 @@ export class DayThree extends Advent {
 
         this.PartA = canvas.FindConflicts(2).toString();
 
+        let loner: Claim;
+        for (const claim of claims) {
+            let collision = false;
+            for (const target of claims) {
+                if (claim.id === target.id) {
+                    continue;
+                }
+                if (claim.DoesConflict(target)) {
+                    collision = true;
+                    break;
+                }
+            }
+            if (!collision) {
+                loner = claim;
+                break;
+            }
+        }
+
+        this.PartB = loner.id.toString();
+
+
     }
 }
 
@@ -39,6 +60,28 @@ class Claim {
         this.y = data[2];
         this.width = data[3];
         this.height = data[4];
+    }
+
+    get Left(): number { return this.x; }
+    get Right(): number { return this.x + this.width - 1; }
+    get Top(): number { return this.y; }
+    get Bottom(): number { return this.y + this.height - 1; }
+
+    public DoesConflict(claim: Claim): boolean {
+        let horizontalCollision = false;
+        let verticalCollision = false;
+
+
+        if (!(claim.Right < this.Left || claim.Left > this.Right)) {
+            horizontalCollision = true;
+        }
+
+        if (horizontalCollision &&
+            !(claim.Bottom < this.Top || claim.Top > this.Bottom)) {
+            verticalCollision = true;
+        }
+
+        return horizontalCollision && verticalCollision;
     }
 }
 
