@@ -35,8 +35,6 @@ export class DayThree extends Advent {
         }
 
         this.PartB = loner.id.toString();
-
-
     }
 }
 
