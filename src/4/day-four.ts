@@ -33,6 +33,14 @@ export class DayFour extends Advent {
 
         this.PartA = (sleepiestGuard.guardId * sleepiestGuard.SleepiestMinute()).toString();
 
+        const sleepyMinute = guardSchedules.reduce((sleepy, next) => {
+            if (next.SleepiestMinuteSleepytime() > sleepy.SleepiestMinuteSleepytime()) {
+                return next;
+            }
+            return sleepy;
+        }, guardSchedules[0]);
+
+        this.PartB = (sleepyMinute.guardId * sleepyMinute.SleepiestMinute()).toString();
     }
 
 
@@ -70,6 +78,9 @@ class GuardSchedule {
     }
     public SleepiestMinute(): number {
         return this.minutesAsleep.findIndex(x => x === Math.max(...this.minutesAsleep));
+    }
+    public SleepiestMinuteSleepytime(): number {
+        return this.minutesAsleep[this.SleepiestMinute()];
     }
 }
 
