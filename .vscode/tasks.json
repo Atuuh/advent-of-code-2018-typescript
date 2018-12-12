@@ -5,11 +5,17 @@
     "tasks": [
         {
             "label": "compile typescript",
-            "type": "npm",
-            "script": "build",
+            "type": "typescript",
+            "tsconfig": "tsconfig.json",
             "group": {
                 "kind": "build",
                 "isDefault": true
+            },
+            "problemMatcher": [
+                "$tsc"
+            ],
+            "presentation": {
+                "reveal": "silent"
             }
         }
     ]

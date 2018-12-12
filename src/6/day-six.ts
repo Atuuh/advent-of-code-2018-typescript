@@ -56,6 +56,7 @@ export class DaySix extends Advent {
 
         this.PartA = Math.max(...sizes).toString();
 
+        this.PartB = Grid.filter(point => point.TotalDistance < 10000).length.toString();
     }
 
     getGridBounds(points: Point[]): GridBounds {
@@ -115,5 +116,9 @@ class GridPoint extends Point {
     GetClosestDistance(): number | null {
         const minDistance = Math.min(...this.Distances);
         return this.Distances.filter(x => x === minDistance).length > 1 ? null : this.Distances.findIndex(x => x === minDistance);
+    }
+
+    get TotalDistance(): number {
+        return this.Distances.map(Number).reduce((total, next) => total + next);
     }
 }
