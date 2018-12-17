@@ -7,7 +7,7 @@ export class DaySeven extends Advent {
         this.DayNumber = "Day Seven";
         this.Input = input;
 
-        const graph = this.parseInput(this.Input.split('\n'));
+        let graph = this.parseInput(this.Input.split('\n'));
 
         let output = '';
         while (true) {
@@ -20,6 +20,58 @@ export class DaySeven extends Advent {
         }
 
         this.PartA = output;
+
+        graph = this.parseInput(this.Input.split('\n'));
+        let roots: Array<number>;
+        const workToDo = [...Array(26).keys()].map(x => x += 61);
+        let workers = new Array<number>();
+        let seconds = 0;
+
+        do {
+            roots = graph.GetRoots()
+                .map(x => x.value.toLowerCase())
+                .sort()
+                .map(this.getIndexForChar);
+
+            // Assign work
+            for (let i = 0; i < roots.length; i++) {
+                const node = roots[i];
+                if (workers.length < 5 && !workers.includes(node)) {
+                    workers.push(node);
+                }
+            }
+
+            // Do work
+            for (let i = 0; i < workers.length; i++) {
+                const node = workers[i];
+
+                workToDo[node]--;
+            }
+
+            // Cleanup
+            let newWorkers = workers;
+            for (let i = 0; i < workers.length; i++) {
+                const node = workers[i];
+                if (workToDo[node] <= 0) {
+                    newWorkers = newWorkers.filter(x => x !== node);
+                    graph.DeleteNode(this.getCharForIndex(node).toUpperCase());
+                }
+            }
+            workers = newWorkers;
+
+            seconds++;
+        } while (workToDo.filter(x => x > 0).length > 0);
+
+        this.PartB = seconds.toString();
+
+    }
+
+    getIndexForChar(char: string): number {
+        return char.charCodeAt(0) - 97;
+    }
+
+    getCharForIndex(index: number): string {
+        return String.fromCharCode(index + 97);
     }
 
     parseInput(inputs: string[]): UniqueGraph<string> {
@@ -121,26 +173,16 @@ class UniqueGraph<T>
     }
 
     GetRoot(): UniqueGraphNode<T> {
-        //     let parents = this.initial.parents.length > 0 ? this.initial.parents : [this.initial];
-        //     while (true) {
-        //         let newParents = parents.reduce((total, next) => {
-        //             return total.concat(next.parents);
-        //         }, new Array<UniqueGraphNode<T>>());
-        //         if (newParents.length === 0) {
-        //             break;
-        //         }
-        //         parents = newParents;
-        //     }
-        //     const values = parents.map(x => x.value)
-        //         .sort();
-        //     return this.FindNode(values[0]);
-        // }
         const values = this.GetAllNodes()
             .filter(x => x.parents.length === 0)
             .map(x => x.value)
             .sort();
 
         return this.FindNode(values[0])
+    }
+
+    GetRoots(): Array<UniqueGraphNode<T>> {
+        return this.GetAllNodes().filter(node => node.parents.length === 0);
     }
 
 }
